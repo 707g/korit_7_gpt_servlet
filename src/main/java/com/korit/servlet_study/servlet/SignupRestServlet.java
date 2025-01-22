@@ -1,9 +1,9 @@
 package com.korit.servlet_study.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.korit.servlet_study.dto.InsertBoardDto;
 import com.korit.servlet_study.dto.ResponseDto;
-import com.korit.servlet_study.service.BoardService;
+import com.korit.servlet_study.dto.SignupDto;
+import com.korit.servlet_study.service.AuthService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,36 +12,32 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.sql.Connection;
 
-@WebServlet("/api/board")
-public class BoardRestServlet extends HttpServlet {
-    private BoardService boardService;
+@WebServlet("/api/signup")
+public class SignupRestServlet extends HttpServlet {
+    private AuthService authService;
 
-    public BoardRestServlet() {
-        boardService = BoardService.getInstance();
+    public SignupRestServlet() {
+        authService = AuthService.getInstance();
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder requestJsonData = new StringBuilder();
 
         try (BufferedReader bufferedReader = request.getReader()) {
             String line;
             while((line = bufferedReader.readLine()) != null) {
-                stringBuilder.append(line);
-            }
+                requestJsonData.append(line);
+            } // 여러 줄이 아니라면 while로 묶지 않아도 된다.
         }
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        InsertBoardDto insertBoardDto = objectMapper.readValue(stringBuilder.toString(), InsertBoardDto.class);
+        ObjectMapper objMapper = new ObjectMapper();
+        SignupDto signupDto = objMapper.readValue(requestJsonData.toString(), SignupDto.class);
 
-        ResponseDto<?> responseDto = boardService.insertBoard(insertBoardDto); //dto로 전달
-        String responseJson = objectMapper.writeValueAsString(responseDto);
-
+        ResponseDto<?> responseDto = authService.signup(signupDto);
         response.setStatus(responseDto.getStatus());
         response.setContentType("application/json");
-        response.getWriter().println(responseJson);
+        response.getWriter().println(objMapper.writeValueAsString(responseDto));
     }
 }
-

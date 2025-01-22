@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.Optional;
 
 public class BoardDao {
     private db.DBConnectionMgr mgr;
@@ -23,7 +22,7 @@ public class BoardDao {
         return instance;
     }
 
-    public Optional<Board> save(Board board) {
+    public Board save(Board board) {
         Board insertedBoard = null;
         Connection con = null;
         PreparedStatement ps = null;
@@ -49,6 +48,6 @@ public class BoardDao {
         } finally {
             mgr.freeConnection(con, ps);
         }
-        return Optional.ofNullable(insertedBoard);
+        return insertedBoard;
     }
 }
