@@ -5,7 +5,7 @@ import com.korit.servlet_study.dto.ResponseDto;
 import com.korit.servlet_study.dto.SigninDto;
 import com.korit.servlet_study.dto.SignupDto;
 import com.korit.servlet_study.entity.User;
-import com.korit.servlet_study.security.jwt.JwtProvider;
+import com.korit.servlet_study.security.jwt.jwt.JwtProvider;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class AuthService {

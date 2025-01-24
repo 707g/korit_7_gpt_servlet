@@ -1,6 +1,7 @@
 package com.korit.servlet_study.service;
 
 import com.korit.servlet_study.dao.UserDao;
+import com.korit.servlet_study.dto.ResponseDto;
 import com.korit.servlet_study.entity.User;
 
 import javax.swing.text.html.Option;
@@ -20,6 +21,14 @@ public class UserService {
             userService = new UserService();
         }
         return userService;
+    }
+
+    public ResponseDto<?> getUser(int UserId) {
+        User foundUser = userDao.findById(UserId);
+        if(foundUser == null) {
+            return ResponseDto.fail("user not found");
+        }
+        return ResponseDto.success(foundUser);
     }
 
     public List<User> getAllUsers(String searchValue){

@@ -23,8 +23,8 @@ public class SigninRestServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // JSON을 dto로 변환하는 과정
         StringBuilder requestJsonData = new StringBuilder();
-
         try(BufferedReader bufferedReader = request.getReader()) {
             String line;
             while((line = bufferedReader.readLine()) != null) {
@@ -32,16 +32,16 @@ public class SigninRestServlet extends HttpServlet {
             }
         }
 
-        // signin
+
         ObjectMapper objectMapper = new ObjectMapper();
         SigninDto signinDto = objectMapper.readValue(requestJsonData.toString(), SigninDto.class);
 
 
         ResponseDto<?> responseDto = authService.signin(signinDto);
 
-        // token
+
         response.setContentType("application/json");
         response.setStatus(responseDto.getStatus());
-        response.getWriter().println(objectMapper.writeValueAsString(responseDto));
+        response.getWriter().println(objectMapper.writeValueAsString(responseDto)); // 해당 dto를 JSON으로 변환
     }
 }
